@@ -43,7 +43,9 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <h2 className="sidebar-title">React Topics</h2>
+       <h2 className="sidebar-title">
+        <Link href="/">React Docs</Link>
+      </h2>
       <ul>
         {topics.map((topic) => (
           <li key={topic.path}>
