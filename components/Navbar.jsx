@@ -18,6 +18,7 @@ const topics = [
   { name: "Portals", path: "/topics/portals" },
   // Advanced Topics
   { name: "Custom Hooks", path: "/topics/custom-hooks" },
+  {name: "code-splitting", path: "/topics/code-splitting"},
   { name: "Higher Order Components (HOC)", path: "/topics/hoc" },
   { name: "Render Props", path: "/topics/render-props" },
   { name: "Lazy Loading (React.lazy & Suspense)", path: "/topics/lazy-suspense" },
@@ -34,6 +35,7 @@ const topics = [
     {name: "Memoization & Pure Components", path: "/topics/memoization-pure"},
     {name: "Suspense for Data Fetching", path: "/topics/suspense-data-fetching"},
     {name: "Adaptive Hydration / Islands Architecture", path: "/topics/adaptive-hydration"},
+    
 ];
 
 export default function Sidebar() {

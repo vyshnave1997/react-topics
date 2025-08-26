@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TopicLayout from "../../../components/TopicLayout";
 
-// ✅ Error Boundary Class Component
+// ✅ Error Boundary
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -10,7 +10,6 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    // Update state so fallback UI is shown
     return { hasError: true, errorMessage: error.toString() };
   }
 
@@ -39,7 +38,7 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-// ✅ A Buggy Component that throws error
+// ✅ Buggy Component (only throws after hydration)
 function BuggyComponent({ throwError }) {
   if (throwError) {
     throw new Error("Simulated error: BuggyComponent crashed!");
@@ -49,38 +48,22 @@ function BuggyComponent({ throwError }) {
 
 // ✅ Page
 export default function ErrorBoundaryPage() {
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure errors only trigger after client-side hydration
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const steps = [
     "1. Create a class component with state `hasError`.",
     "2. Use `getDerivedStateFromError` to update state when error happens.",
     "3. Use `componentDidCatch` to log error details.",
     "4. Wrap child components inside <ErrorBoundary>.",
-    "5. When an error occurs, show fallback UI instead of crashing app.",
+    "5. Show fallback UI instead of crashing app.",
   ];
 
   const code = `
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.log("Error:", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <h3>⚠ Something went wrong!</h3>;
-    }
-    return this.props.children;
-  }
-}
-
-// Usage
 <ErrorBoundary>
   <BuggyComponent throwError={true} />
 </ErrorBoundary>
@@ -93,10 +76,14 @@ class ErrorBoundary extends React.Component {
         <BuggyComponent throwError={false} />
       </ErrorBoundary>
 
-      <h4 style={{ marginTop: "20px" }}>With Error:</h4>
-      <ErrorBoundary>
-        <BuggyComponent throwError={true} />
-      </ErrorBoundary>
+      {isClient && (
+        <>
+          <h4 style={{ marginTop: "20px" }}>With Error:</h4>
+          <ErrorBoundary>
+            <BuggyComponent throwError={true} />
+          </ErrorBoundary>
+        </>
+      )}
     </div>
   );
 
